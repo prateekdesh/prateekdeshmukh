@@ -3,42 +3,51 @@
   export let role = "Role";
   export let period = "Period";
   export let description = "";
+  export let bullets = [];
   export let tags = [];
 </script>
 
-<div class="relative pl-8 pb-12 last:pb-0 group">
-  <!-- Timeline Line -->
-  <div class="absolute left-[11px] top-0 bottom-0 w-[2px] bg-accent/10 group-last:bg-gradient-to-b group-last:from-accent/10 group-last:to-transparent"></div>
-  
-  <!-- Timeline Dot -->
-  <div class="absolute left-0 top-0 w-6 h-6 rounded-full border-2 border-accent/20 bg-off-white dark:bg-ink flex items-center justify-center transition-all duration-300 group-hover:border-accent">
-    <div class="w-1.5 h-1.5 rounded-full bg-accent opacity-40 group-hover:opacity-100"></div>
-  </div>
-
+<div class="group relative grid grid-cols-[1fr_auto] gap-6 py-10 border-b border-rule last:border-b-0 hover:border-accent/20 transition-colors duration-300">
+  <!-- Left column -->
   <div class="flex flex-col gap-2">
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
-      <h3 class="text-lg font-heading font-bold tracking-tight">{role}</h3>
-      <span class="text-xs font-bold uppercase tracking-widest text-accent/60">{period}</span>
-    </div>
-    
-    <div class="text-sm font-medium text-accent hover:underline decoration-accent/30 underline-offset-4 cursor-default">
+    <!-- Role -->
+    <h3 class="font-heading text-xl text-cream leading-tight">
+      {role}
+    </h3>
+
+    <!-- Company -->
+    <div class="font-mono text-[11px] tracking-[0.15em] uppercase text-accent">
       {company}
     </div>
 
-    {#if description}
-      <p class="text-sm text-ink/60 dark:text-off-white/60 mt-1 max-w-xl leading-relaxed">
+    <!-- Bullet list (preferred) -->
+    {#if bullets.length > 0}
+      <ul class="mt-3 flex flex-col gap-2 max-w-xl">
+        {#each bullets as bullet}
+          <li class="flex gap-3 text-sm text-dim leading-relaxed">
+            <span class="mt-[0.35em] shrink-0 w-1 h-1 rounded-full bg-accent/40"></span>
+            <span>{bullet}</span>
+          </li>
+        {/each}
+      </ul>
+    {:else if description}
+      <p class="mt-3 text-sm text-dim leading-relaxed max-w-xl">
         {description}
       </p>
     {/if}
 
+    <!-- Tags -->
     {#if tags.length > 0}
-      <div class="flex flex-wrap gap-2 mt-2">
+      <div class="flex flex-wrap gap-2 mt-4">
         {#each tags as tag}
-          <span class="text-[10px] font-bold text-ink/40 dark:text-off-white/40 uppercase tracking-widest">
-            {tag}
-          </span>
+          <span class="tag">{tag}</span>
         {/each}
       </div>
     {/if}
+  </div>
+
+  <!-- Right column: period -->
+  <div class="font-mono text-[10px] tracking-[0.12em] uppercase text-muted whitespace-nowrap pt-1">
+    {period}
   </div>
 </div>

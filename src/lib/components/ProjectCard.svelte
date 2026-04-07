@@ -4,39 +4,61 @@
 
   export let title = "Project Title";
   export let description = "Project description goes here.";
-  export let tags = ["Svelte", "Tailwind"];
+  export let tags = [];
   export let github = "";
   export let link = "";
 </script>
 
-<div class="group relative p-6 rounded-3xl border border-accent/10 bg-off-white dark:bg-ink hover:border-accent/30 transition-all duration-300 shadow-sm hover:shadow-xl hover:shadow-accent/5 overflow-hidden">
-  <div class="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity">
-    <div class="flex gap-2">
+<article class="group relative flex flex-col border-b border-rule py-8 transition-all duration-300 hover:border-accent/30 cursor-default">
+  <!-- Accent line that grows on hover -->
+  <div class="absolute left-0 top-0 h-px bg-accent origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-out w-full"></div>
+
+  <div class="flex items-start justify-between gap-4">
+    <!-- Title -->
+    <h3 class="font-heading text-xl text-cream group-hover:text-accent transition-colors duration-300 leading-tight">
+      {title}
+    </h3>
+
+    <!-- Links -->
+    <div class="flex items-center gap-2 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
       {#if github}
-        <a href={github} target="_blank" class="p-2 rounded-full bg-accent/10 hover:bg-accent text-accent hover:text-white transition-all">
-          <Github size={18} />
+        <a
+          href={github}
+          target="_blank"
+          rel="noreferrer"
+          class="p-1.5 text-dim hover:text-accent transition-colors duration-200"
+          aria-label="View source on GitHub"
+          on:click|stopPropagation
+        >
+          <Github size={16} />
         </a>
       {/if}
       {#if link}
-        <a href={link} target="_blank" class="p-2 rounded-full bg-accent/10 hover:bg-accent text-accent hover:text-white transition-all">
-          <ArrowUpRight size={18} />
+        <a
+          href={link}
+          target="_blank"
+          rel="noreferrer"
+          class="p-1.5 text-dim hover:text-accent transition-colors duration-200"
+          aria-label="Open project"
+          on:click|stopPropagation
+        >
+          <ArrowUpRight size={16} />
         </a>
       {/if}
     </div>
   </div>
 
-  <div class="flex flex-col gap-3">
-    <h3 class="text-xl font-heading font-bold tracking-tight group-hover:text-accent transition-colors">{title}</h3>
-    <p class="text-sm text-ink/60 dark:text-off-white/60 leading-relaxed">
-      {description}
-    </p>
-    
-    <div class="flex flex-wrap gap-2 mt-2">
+  <!-- Description -->
+  <p class="mt-3 text-sm text-dim leading-relaxed max-w-prose">
+    {description}
+  </p>
+
+  <!-- Tags -->
+  {#if tags.length > 0}
+    <div class="flex flex-wrap gap-2 mt-5">
       {#each tags as tag}
-        <span class="px-3 py-1 text-[10px] font-bold uppercase tracking-widest rounded-full bg-accent/5 dark:bg-accent/10 text-accent border border-accent/10">
-          {tag}
-        </span>
+        <span class="tag">{tag}</span>
       {/each}
     </div>
-  </div>
-</div>
+  {/if}
+</article>

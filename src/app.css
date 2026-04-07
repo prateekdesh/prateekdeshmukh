@@ -4,45 +4,68 @@
 
 @layer base {
   :root {
-    --bg-color: #fbfaf9;
-    --text-color: #1a1a1a;
-    --accent-color: #f97316;
+    --accent: #e8a020;
+    --canvas: #0c0c0d;
+    --surface: #141415;
+    --surface-2: #1c1c1e;
+    --rule: #272729;
+    --cream: #f0ede8;
+    --dim: #9a9aa5;
+    --muted: #5a5a60;
   }
 
-  .dark {
-    --bg-color: #111111;
-    --text-color: #f5f5f5;
+  html {
+    background-color: var(--canvas);
+    color: var(--cream);
+    scroll-behavior: smooth;
   }
 
   body {
-    @apply bg-[var(--bg-color)] text-[var(--text-color)] font-body transition-colors duration-300;
+    background-color: var(--canvas);
+    color: var(--cream);
+    font-family: "DM Sans", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-heading tracking-tight;
+    font-family: "DM Serif Display", serif;
+  }
+
+  ::selection {
+    background: rgba(232, 160, 32, 0.25);
+    color: #e8a020;
   }
 }
 
-.boutique-glow {
-  box-shadow: 0 0 20px -5px rgba(249, 115, 22, 0.2);
+/* ─── Grain overlay ──────────────────────────────────── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  opacity: 0.025;
+  pointer-events: none;
+  z-index: 9998;
 }
 
-.playful-hover {
-  @apply transition-transform duration-300 hover:-translate-y-1;
-}
-
+/* ─── Scrollbar ──────────────────────────────────────── */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 4px;
 }
-
 ::-webkit-scrollbar-track {
-  @apply bg-transparent;
+  background: transparent;
 }
-
 ::-webkit-scrollbar-thumb {
-  @apply bg-accent/20 rounded-full hover:bg-accent/40 transition-colors;
+  background: var(--rule);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted);
 }
 
+/* ─── Custom cursor ──────────────────────────────────── */
 .custom-cursor-active body * {
   cursor: none !important;
 }
@@ -51,15 +74,93 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 18px;
-  height: 18px;
-  border: 2px solid var(--accent-color);
+  width: 16px;
+  height: 16px;
+  border: 1.5px solid var(--accent);
   border-radius: 9999px;
   pointer-events: none;
   transform: translate3d(-100px, -100px, 0);
-  transition: opacity 150ms ease;
-  mix-blend-mode: difference;
-  box-shadow: 0 0 20px rgba(249, 115, 22, 0.25);
-  backdrop-filter: blur(4px);
+  transition: opacity 200ms ease, width 200ms ease, height 200ms ease;
+  mix-blend-mode: screen;
+  box-shadow: 0 0 12px rgba(232, 160, 32, 0.4);
   z-index: 9999;
+}
+
+/* ─── Section label / eyebrow ────────────────────────── */
+.eyebrow {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* ─── Rule line ──────────────────────────────────────── */
+.h-rule {
+  border-top: 1px solid var(--rule);
+}
+
+/* ─── Keyframes ──────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ─── Hero load animations ───────────────────────────── */
+.hero-fade-in {
+  animation: fadeIn 0.6s ease forwards;
+}
+.hero-fade-up-1 {
+  opacity: 0;
+  animation: fadeUp 0.7s 0.1s ease forwards;
+}
+.hero-fade-up-2 {
+  opacity: 0;
+  animation: fadeUp 0.7s 0.25s ease forwards;
+}
+.hero-fade-up-3 {
+  opacity: 0;
+  animation: fadeUp 0.7s 0.4s ease forwards;
+}
+.hero-fade-in-4 {
+  opacity: 0;
+  animation: fadeIn 0.6s 0.6s ease forwards;
+}
+
+/* ─── Scroll-triggered reveal ────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─── Tag pill ───────────────────────────────────────── */
+.tag {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 3px;
+  border: 1px solid var(--rule);
+  color: var(--dim);
+}
+.tag-accent {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 3px;
+  border: 1px solid rgba(232, 160, 32, 0.3);
+  color: var(--accent);
+  background-color: rgba(232, 160, 32, 0.05);
 }
