@@ -154,6 +154,25 @@ body::before {
   }
 }
 
+/* ─── Expandable spans (native <details>) ────────────── */
+details.span-detail > summary {
+  list-style: none;
+  cursor: pointer;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--dim);
+  padding: 2px 0;
+  transition: color 140ms ease;
+  user-select: none;
+}
+details.span-detail > summary:hover { color: var(--sig-deep); }
+details.span-detail > summary::-webkit-details-marker { display: none; }
+details.span-detail > summary .exp-open { display: none; }
+details.span-detail[open] > summary .exp-open { display: inline; }
+details.span-detail[open] > summary .exp-closed { display: none; }
+details.span-detail > summary .exp-arrow { color: var(--sig); margin-right: 0.4em; }
+
 /* ─── Blinking caret ─────────────────────────────────── */
 @keyframes caret-blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
 .caret {

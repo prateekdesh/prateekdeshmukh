@@ -19,7 +19,7 @@
         <div class="font-mono text-[11px] leading-[2] text-dim pb-10">
           <div><span class="text-sig font-semibold">session.end</span><span class="text-faint">()</span></div>
           <div class="text-faint">
-            spans=8 · incidents=4 <span class="text-sig-deep">(all resolved)</span> · region=bengaluru
+            spans=8 · incidents=3 <span class="text-sig-deep">(all resolved)</span> · region=bengaluru
           </div>
         </div>
       </div>

@@ -73,18 +73,18 @@
         { t: 'T+29:00', lvl: 'SHIP', err: false, msg: 'same behavior, now a modular service — swapped in behind the old interface' },
         { t: 'T+36:00', lvl: 'CLOSE', err: false, msg: '7+ hours of regression testing and code review. zero dropped messages.' }
       ],
-      reflection: 'You don\u2019t get to pause customer messages while you rewrite the thing that receives them.'
+      reflection: 'The one where I realized you don\u2019t get to pause customer messages while you rewrite the service that receives them.'
     },
     {
       idx: 1,
       key: 'faff · db.cutover',
-      title: 'The 2 a.m. migration',
+      title: 'The 2 a.m. DB migration',
       logs: [
         { t: 'fri 01:58', lvl: 'FREEZE', err: false, msg: 'messages table, MongoDB. millions of rows. cutover window opens.' },
         { t: 'fri 02:04', lvl: 'CUT', err: false, msg: 'Postgres takes writes. killswitch under my thumb the entire time.' },
         { t: 'fri 02:47', lvl: 'VERIFY', err: false, msg: 'row counts match. reads clean. the killswitch was never pressed.' }
       ],
-      reflection: 'A migration should never be a bet you win by luck. I rehearsed the rollback until it was boring.'
+      reflection: 'The one where I migrated millions of rows from Mongo to Postgres. A migration should never be a bet you win by luck. I rehearsed the rollback until it was boring.'
     },
     {
       idx: 2,
@@ -95,19 +95,7 @@
         { t: 'day 0', lvl: 'TRACE', err: false, msg: 'followed the failure out of our stack and into an external vendor\u2019s system' },
         { t: 'day 1', lvl: 'CLOSE', err: false, msg: 'filed with full logs and a repro. vendor confirmed, patched, resolved.' }
       ],
-      reflection: 'The bug doesn\u2019t care whose repo it lives in. An RCA that stops at your own walls is just half a document.'
-    },
-    {
-      idx: 3,
-      key: 'personal · tooling',
-      title: 'The grudge',
-      logs: [
-        { t: 'loop', lvl: 'WARN', err: true, msg: 'ngrok up → paste URL into provider → webhook barrage → kill server → ctrl+F the noise → repeat' },
-        { t: 'break', lvl: 'BUILD', err: false, msg: 'wrote hooked: inspect and filter webhook payloads in real time, keep the flow' }
-      ],
-      href: 'https://github.com/prateekdesh/hooked',
-      host: 'github.com/prateekdesh/hooked',
-      reflection: 'Some tools are born from vision. This one was born from being annoyed four times in one afternoon.'
+      reflection: 'The one with the broken feature and a bug. The bug doesn\u2019t care whose repo it lives in. An RCA that stops at your own walls is just half a document.'
     }
   ];
 
@@ -225,20 +213,13 @@
 
 <div id="top" class="relative mx-auto max-w-[1060px] px-5 md:px-10 pt-20 md:pt-24">
 
-  <!-- ═══ Session preamble ═══════════════════════════════ -->
-  <div class="font-mono text-[11px] md:text-[12px] leading-[2] text-dim mb-10">
-    <div class="boot boot-1">
-      <span class="text-faint">$</span> <span class="text-ink font-medium">trace</span> --live prateek-deshmukh
-    </div>
-    <div class="boot boot-2">
-      <span class="text-faint">SESSION&nbsp;&nbsp;</span>region=ap-south-1 · bengaluru, IN · sampling=1.0
-    </div>
-    <div class="boot boot-3">
-      <span class="text-faint">STATUS&nbsp;&nbsp;&nbsp;</span><span class="inline-flex items-center gap-1.5"><span class="dot-live"></span><span class="text-sig-deep font-medium">available_for_work</span></span> — interesting problems
-    </div>
-    <!-- <div class="boot boot-4">
-      <span class="text-faint">CTX&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>currently_reading=<span class="italic font-serif text-[14px] text-ink">“The Waves”</span> — virginia woolf
-    </div> -->
+  <!-- ═══ Session preamble: one quiet line ═══════════════ -->
+  <div class="boot boot-1 font-mono text-[11px] md:text-[12px] leading-[2] text-dim mb-10 flex flex-wrap items-center gap-x-2">
+    <span><span class="text-faint">$</span> <span class="text-ink font-medium">trace</span> --live prateek-deshmukh</span>
+    <span class="text-faint">·</span>
+    <span class="inline-flex items-center gap-1.5"><span class="dot-live"></span><span class="text-sig-deep font-medium">available_for_work</span></span>
+    <span class="text-faint">·</span>
+    <span>bengaluru, IN</span>
   </div>
 
   <!-- ═══ The trace spine ════════════════════════════════ -->
@@ -246,32 +227,32 @@
 
     <!-- ── span 01 · identity ──────────────────────────── -->
     <section id="identity" class="visible pb-24 md:pb-32">
-      <div class="boot boot-5">
-        <ToolCall num="01" name="identity.resolve" args={'{ subject: "prateek" }'} dur="12ms" ok="200 OK" />
+      <div class="boot boot-2 relative">
+        <span
+          class="absolute -left-7 md:-left-14 top-[3px] w-[9px] h-[9px] -translate-x-[5px] rotate-45 bg-sig"
+          aria-hidden="true"
+        ></span>
+        <p class="font-mono text-[11px] tracking-wide text-faint mb-6">
+          span_01 · <span class="text-sig-deep">identity.resolve()</span> · <span class="text-sig font-medium">200 OK</span>
+        </p>
       </div>
 
-      <div class="boot boot-6">
+      <div class="boot boot-3">
         <h1 class="font-serif font-medium text-ink leading-[0.98] tracking-[-0.02em] mb-6"
             style="font-size: clamp(3.1rem, 9vw, 6.5rem);">
           Prateek<br />
           Deshmukh
         </h1>
         <p class="font-mono text-[12px] md:text-[13px] text-sig-deep mb-10">
-          <span class="text-faint">→ resolved ·</span> backend &amp; applied-AI engineer <span class="text-faint">·</span> bengaluru, IN
+          backend &amp; applied-AI engineer <span class="text-faint">·</span> bengaluru, IN
         </p>
       </div>
 
-      <!-- the incident, and the point -->
-      <div class="boot boot-7 font-mono text-[11px] md:text-[12px] leading-[2] mb-6">
-        <div><span class="text-faint">03:12:44.108</span>&nbsp;&nbsp;<span class="text-err font-semibold">ERROR</span>&nbsp;&nbsp;<span class="text-dim">payments.webhook</span>&nbsp;&nbsp;<span class="text-ink">signature verification failed in prod</span></div>
-        <div><span class="text-faint">03:41:02.551</span>&nbsp;&nbsp;<span class="text-sig font-semibold">INFO&nbsp;</span>&nbsp;&nbsp;<span class="text-dim">fix.deploy&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;&nbsp;<span class="text-ink">patched · replayed · regression test added</span></div>
-      </div>
-
-      <p class="boot boot-8 font-serif italic text-[22px] md:text-[26px] leading-snug text-ink max-w-2xl mb-12">
+      <p class="boot boot-4 font-serif italic text-[22px] md:text-[26px] leading-snug text-ink max-w-2xl mb-12">
         I build the parts that break in production — and fix them before they do again.<span class="caret ml-2"></span>
       </p>
 
-      <div class="boot boot-9 flex flex-wrap items-center gap-4">
+      <div class="boot boot-5 flex flex-wrap items-center gap-4">
         <a href="/resume.pdf" target="_blank" rel="noreferrer" class="btn-trace">
           <span class="verb">GET</span> /resume <span class="text-faint">↗</span>
         </a>
@@ -285,12 +266,12 @@
     <!-- ── span 02 · experience ────────────────────────── -->
     <section id="experience" class="reveal pb-24 md:pb-32 scroll-mt-24">
       <ToolCall
-        num="02" name="experience.query" args={'{ order: "reverse_chronological" }'}
-        pending="querying…" ok="3 records" dur="38ms"
+        num="02" heading="Where I’ve worked" call="experience.query()"
+        pending="querying…" ok="3 records"
       />
 
       {#each experience as job, i}
-        <article class="reveal relative grid md:grid-cols-[180px_1fr] gap-x-10 gap-y-3 py-9 {i < experience.length - 1 ? 'border-b border-rule' : ''}"
+        <article class="reveal relative grid md:grid-cols-[180px_1fr] gap-x-10 gap-y-3 py-10 {i < experience.length - 1 ? 'border-b border-rule' : ''}"
                  style="transition-delay: {i * 90}ms">
           <div class="flex md:flex-col items-baseline md:items-start gap-x-4 gap-y-2">
             <span class="font-mono text-[11px] text-dim">{job.period}</span>
@@ -304,21 +285,21 @@
           </div>
 
           <div>
-            <div class="m-label mb-2">rec[{job.idx}] · {job.key}</div>
-            <h3 class="font-serif text-[24px] md:text-[27px] font-medium leading-tight text-ink mb-3">
+            <h3 class="font-serif text-[25px] md:text-[28px] font-medium leading-tight text-ink mb-3">
               {job.role} <em class="font-normal text-dim">· {job.company}</em>
             </h3>
-            <p class="prose-out text-[17.5px] leading-normal text-ink mb-4 max-w-xl">
+            <p class="prose-out text-[18px] leading-normal text-ink mb-4 max-w-xl">
               {job.summary}
             </p>
             <ul class="flex flex-col gap-2.5 mb-5">
               {#each job.bullets as b}
-                <li class="prose-out text-[15.5px] text-dim flex gap-3">
+                <li class="prose-out text-[16px] text-dim flex gap-3">
                   <span class="text-sig font-mono text-[12px] leading-[1.7] shrink-0">▸</span>
                   <span>{b}</span>
                 </li>
               {/each}
             </ul>
+
             <div class="flex flex-wrap gap-1.5">
               {#each job.tags as t}<span class="tok">{t}</span>{/each}
             </div>
@@ -336,37 +317,43 @@
     <!-- ── span 03 · incidents ─────────────────────────── -->
     <section id="incidents" class="reveal pb-24 md:pb-32 scroll-mt-24">
       <ToolCall
-        num="03" name="incidents.tail" args={'{ n: 4, resolved: true }'}
-        pending="tailing…" ok="4 events" dur="112ms"
+        num="03" heading="Things that (almost) broke" call="incidents.tail()"
+        pending="tailing…" ok="3 resolved"
       />
 
-      <div class="grid md:grid-cols-2 gap-x-12 gap-y-12">
+      <div class="grid md:grid-cols-3 gap-x-10 gap-y-12">
         {#each incidents as inc, i}
           <article class="reveal" style="transition-delay: {i * 90}ms">
-            <div class="m-label mb-2">inc[{inc.idx}] · {inc.key}</div>
-            <h3 class="font-serif text-[22px] md:text-[24px] font-medium leading-tight text-ink mb-4">
+            <div class="m-label mb-2">{inc.key}</div>
+            <h3 class="font-serif text-[23px] md:text-[25px] font-medium leading-tight text-ink mb-3">
               {inc.title}
             </h3>
-            <div class="border border-rule bg-paper-2 px-4 py-3.5 font-mono text-[11px] leading-[1.9] mb-4">
-              {#each inc.logs as log}
-                <div class="flex gap-3">
-                  <span class="text-faint shrink-0 w-[64px]">{log.t}</span>
-                  <span class="{log.err ? 'text-err' : 'text-sig'} font-semibold shrink-0 w-[48px]">{log.lvl}</span>
-                  <span class="text-dim">{log.msg}</span>
-                </div>
-              {/each}
-              {#if inc.href}
-                <div class="flex gap-3 mt-1 pt-2 border-t border-rule">
-                  <span class="text-faint shrink-0 w-[64px]"></span>
-                  <a href={inc.href} target="_blank" rel="noreferrer" class="link-mono text-[10.5px]">
-                    <span class="text-sig font-semibold">GET</span> {inc.host} ↗
-                  </a>
-                </div>
-              {/if}
-            </div>
-            <p class="font-serif italic text-[15.5px] leading-normal text-dim">
+            <p class="font-serif italic text-[16.5px] leading-normal text-dim mb-4">
               <span class="note-mark">✳</span> {inc.reflection}
             </p>
+            <details class="span-detail">
+              <summary>
+                <span class="exp-closed"><span class="exp-arrow">▸</span>show the log</span>
+                <span class="exp-open"><span class="exp-arrow">▾</span>hide the log</span>
+              </summary>
+              <div class="border border-rule bg-paper-2 px-4 py-3.5 font-mono text-[11px] leading-[1.9] mt-3">
+                {#each inc.logs as log}
+                  <div class="flex gap-3">
+                    <span class="text-faint shrink-0 w-[64px]">{log.t}</span>
+                    <span class="{log.err ? 'text-err' : 'text-sig'} font-semibold shrink-0 w-[48px]">{log.lvl}</span>
+                    <span class="text-dim">{log.msg}</span>
+                  </div>
+                {/each}
+                {#if inc.href}
+                  <div class="flex gap-3 mt-1 pt-2 border-t border-rule">
+                    <span class="text-faint shrink-0 w-[64px]"></span>
+                    <a href={inc.href} target="_blank" rel="noreferrer" class="link-mono text-[10.5px]">
+                      <span class="text-sig font-semibold">GET</span> {inc.host} ↗
+                    </a>
+                  </div>
+                {/if}
+              </div>
+            </details>
           </article>
         {/each}
       </div>
@@ -375,8 +362,8 @@
     <!-- ── span 04 · journal ───────────────────────────── -->
     <section id="writing" class="reveal pb-24 md:pb-32 scroll-mt-24">
       <ToolCall
-        num="04" name="journal.recent" args={'{ limit: 3 }'}
-        pending="fetching…" ok="1 entry" dur="87ms"
+        num="04" heading="Writing" call="journal.recent()"
+        pending="fetching…" ok="1 entry"
       />
 
       {#each journal as post, i}
@@ -409,8 +396,8 @@
     <!-- ── span 05 · projects ──────────────────────────── -->
     <section id="projects" class="reveal pb-24 md:pb-32 scroll-mt-24">
       <ToolCall
-        num="05" name="projects.scan" args={'{ filter: "shipped", featured: 3 }'}
-        pending="scanning…" ok="7 objects" dur="64ms"
+        num="05" heading="Things I’ve built" call="projects.scan()"
+        pending="scanning…" ok="7 shipped"
       />
 
       <!-- featured three -->
@@ -421,7 +408,6 @@
             class="reveal group flex flex-col border border-rule bg-paper-2 p-6 no-underline transition-colors duration-200 hover:border-sig"
             style="transition-delay: {i * 90}ms"
           >
-            <div class="m-label mb-4">obj[{p.idx}] · featured</div>
             <h3 class="font-serif text-[24px] font-medium text-ink leading-tight mb-3 group-hover:text-sig-deep transition-colors duration-200">
               {p.title}
             </h3>
@@ -438,13 +424,12 @@
       </div>
 
       <!-- the other four -->
-      <div class="m-label mb-4">…4 more objects</div>
+      <div class="m-label mb-4">and 4 more</div>
       <div class="flex flex-col">
         {#each more as p, i}
           <div class="reveal border-t border-rule py-5 grid md:grid-cols-[minmax(0,1fr)_auto] gap-x-8 gap-y-2 items-baseline"
                style="transition-delay: {i * 70}ms">
             <div class="flex flex-wrap items-baseline gap-x-4 gap-y-1">
-              <span class="font-mono text-[11px] text-faint">[{p.idx}]</span>
               <h3 class="font-serif text-[19px] font-medium text-ink">{p.title}</h3>
               <p class="prose-out text-[14.5px] text-dim w-full md:w-auto md:flex-1 leading-normal">{p.desc}</p>
             </div>
@@ -463,8 +448,8 @@
     <!-- ── span 06 · stack ─────────────────────────────── -->
     <section id="stack" class="reveal pb-24 md:pb-32 scroll-mt-24">
       <ToolCall
-        num="06" name="capabilities.manifest" args={'{}'}
-        pending="loading…" ok="200 OK" dur="9ms"
+        num="06" heading="What I use" call="capabilities.manifest()"
+        pending="loading…" ok="200 OK"
       />
 
       <div class="border border-rule bg-paper-2 p-6 md:p-8 font-mono text-[12px] md:text-[13px] leading-[2.1]">
@@ -481,13 +466,12 @@
     <!-- ── span 07 · education ─────────────────────────── -->
     <section id="education" class="reveal pb-24 md:pb-32 scroll-mt-24">
       <ToolCall
-        num="07" name="education.lookup" args={'{}'}
-        pending="looking up…" ok="1 record" dur="21ms"
+        num="07" heading="Where I studied" call="education.lookup()"
+        pending="looking up…" ok="1 record"
       />
 
       <div class="grid md:grid-cols-[minmax(0,1fr)_auto] gap-x-12 gap-y-6 items-end">
         <div>
-          <div class="m-label mb-2">rec[0] · srm_ist</div>
           <h3 class="font-serif text-[24px] md:text-[27px] font-medium leading-tight text-ink mb-2">
             SRM Institute of Science and Technology
           </h3>
@@ -504,16 +488,14 @@
     <!-- ── span 08 · contact ───────────────────────────── -->
     <section id="contact" class="reveal pb-10 scroll-mt-24">
       <ToolCall
-        num="08" name="contact.open" args={'{ channels: "all" }'}
-        pending="opening…" ok="202 Accepted" dur="2ms"
-      />
+        num="08" call="contact.open()"
+        pending="opening…" ok="202 Accepted"
+      >
+        Let’s build something <em class="font-normal">worth breaking.</em>
+      </ToolCall>
 
-      <h2 class="font-serif font-medium text-ink leading-[1.02] tracking-[-0.015em] mb-5"
-          style="font-size: clamp(2.4rem, 6vw, 4.5rem);">
-        Let’s build something<br /><em class="font-normal">worth breaking.</em>
-      </h2>
-      <p class="prose-out text-dim max-w-xl mb-10">
-        Open to interesting problems. If something clicks, say the word.
+      <p class="prose-out text-[18px] text-dim max-w-xl mb-10">
+        Open to interesting problems. Hit me up.
       </p>
 
       <!-- the payload -->
