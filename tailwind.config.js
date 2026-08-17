@@ -4,20 +4,18 @@ export default {
   theme: {
     extend: {
       colors: {
-        // ── "Printed trace" palette ──────────────────────
-        'paper': '#f5f2e9',     // warm paper background
-        'paper-2': '#eeeadf',   // raised/inset blocks
-        'ink': '#211f1a',       // primary text
-        'dim': '#6d675a',       // secondary text
-        'faint': '#9c9583',     // tertiary / metadata
-        'rule': '#dcd5c3',      // hairlines
-        'sig': '#156d4d',       // signal green — statuses, tool names, accents
-        'sig-deep': '#0d4f37',  // hover green
-        'err': '#b23a2f',       // error red — used once, narratively
+        'editorial-bg': '#f5f1e9',
+        'editorial-surface': '#ebe5d9',
+        'editorial-ink': '#25231f',
+        'editorial-muted': '#706b61',
+        'editorial-line': '#d5cec0',
+        'editorial-accent': '#d85e3f',
       },
       fontFamily: {
-        'mono': ['"IBM Plex Mono"', 'ui-monospace', 'monospace'],
-        'serif': ['"Newsreader"', 'Georgia', 'serif'],
+        'display': ['"Fraunces"', 'Georgia', 'serif'],
+        'prose': ['"Newsreader"', 'Georgia', 'serif'],
+        'ui': ['"Manrope"', 'sans-serif'],
+        'mono': ['"DM Mono"', 'ui-monospace', 'monospace'],
       },
     },
   },
