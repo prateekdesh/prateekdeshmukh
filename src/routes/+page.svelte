@@ -2,197 +2,359 @@
   import { onMount } from 'svelte';
 
   let copied = false;
+  let scrollProgress = 0;
+
+  const work = [
+      {
+        company: 'faff',
+        period: 'Sep 2025—Mar 2026',
+        context: 'Founding engineer',
+        question: 'Seven months of building everything. No, seriously.',
+        summary:
+          'Faff was a personal concierge on WhatsApp. I worked on most of it: agents, payments, internal tools, payouts, infrastructure and a fair amount of debugging.',
+        result: '<200 ms',
+        resultNote: 'down from ~2 minutes',
+        details: [
+          'Shipped production consumer-facing AI agents',
+          'Rebuilt unacknowledged message detection and cut latency from roughly two minutes to under 200 milliseconds.',
+          'Built the internal system used to reconcile thousands of weekly vendor payouts.',
+          'Moved payments from Razorpay to Cashfree and set up multilingual voice outreach.'
+        ]
+      },
+    {
+      company: 'NatWest Group',
+      period: 'Jun—Aug 2026',
+      context: 'Engineering intern',
+      question: 'Agent discovery and retrieval for Synapse.',
+      summary:
+        'Synapse routes a user’s request to the right workflow or specialist agent. I worked on the search and registry pieces behind that routing.',
+      result: 'Postgres + hybrid search',
+      resultNote: 'for retrieval',
+      details: [
+        'Moved search from an in-memory vector store to PostgreSQL and pgvector.',
+        'Added full-text search and BM25 ranking instead of relying only on embeddings.',
+        'Connected Synapse to AWS Agent Registry and worked on the internal capability registry.'
+      ]
+    },
+    {
+      company: 'Together Fund',
+      period: 'Apr—Jun 2026',
+      context: 'AI engineer',
+      question: 'Making 2,000+ contacts actually useful.',
+      summary:
+        'The fund had useful information spread across spreadsheets, LinkedIn, GitHub and personal sites. I built the pipeline that pulled it together, cleaned it up and found relationships between people.',
+      result: '2,000+',
+      resultNote: 'profiles brought together',
+      details: [
+        'Ingested and enriched profiles from LinkedIn, GitHub and personal websites.',
+        'Improved profile completeness by roughly 40–60%.',
+        'Built a graph that could find the shortest introduction path between people.'
+      ]
+    }
+  ];
+
+  const projects = [
+    {
+      name: 'Ghost',
+      type: 'Local writing harness',
+      description: 'A local writing app with a real filesystem, an editor, a terminal and an agent.',
+      href: 'https://github.com/prateekdesh/ghost'
+    },
+    {
+      name: 'Hooked',
+      type: 'Webhook debugger',
+      description: 'A small CLI I built after debugging one too many payment webhooks.',
+      href: 'https://github.com/prateekdesh/hooked'
+    },
+    {
+      name: 'Yaaru',
+      type: 'Multiplayer party game',
+      description: 'My real-time version of the party game “Impostor Who?”.',
+      href: 'https://github.com/prateekdesh/yaaru'
+    },
+    {
+      name: 'Backademia',
+      type: 'University, reverse-engineered',
+      description: 'A slightly unofficial API and MCP server for my university portal.',
+      href: 'https://github.com/prateekdesh/backademia'
+    }
+  ];
+
+  const elsewhere = [
+    ['Reading right now', 'The Difficulty of Being Good'],
+    ['Running', 'training for a first half marathon'],
+    ['Can talk too long about', 'Greek mythology'],
+    ['Also playing', 'chess and pickleball'],
+    ['Usually', 'cooking or looking for food']
+  ];
 
   async function copyEmail() {
     await navigator.clipboard.writeText('prateek.deshmukh19@gmail.com');
     copied = true;
-    setTimeout(() => (copied = false), 2200);
+    setTimeout(() => (copied = false), 1800);
   }
 
-  const work = [
-    {
-      period: '2025 - 2026',
-      company: 'faff',
-      title: 'A personal concierge service on WhatsApp.',
-      paragraphs: [
-        'Faff uses AI agents in the background, with a human in the loop for payments and the things agents cannot do yet. I worked across the product: internal tools, backend services, frontend, databases, infrastructure, payments, and AI agents.',
-        'The biggest skill I picked up was debugging and experimenting with new technology under real constraints. In a lean startup, you have to figure out what matters, what can wait, and how to make the next experiment cheap.'
-      ]
-    },
-    {
-      period: '2026',
-      company: 'natwest group',
-      title: 'Making agents discoverable and workflows durable.',
-      paragraphs: [
-        'At NatWest, I worked on Synapse, an intelligent orchestrator that reads a user query and routes it to the right workflow or subagent, or creates a workflow from composable tools.',
-        'I worked on retrieval, agent discovery, capability registries, and the systems that make workflows durable and observable. I migrated retrieval to PostgreSQL and pgvector, replaced semantic-only search with hybrid search, and integrated AWS Agent Registry for runtime discovery.',
-        'The most interesting part was thinking about how agents discover what they can do, how tools become composable workflows, and how those workflows can execute reliably.'
-      ]
-    },
-    {
-      period: '2026',
-      company: 'together fund',
-      title: 'Making a talent network useful.',
-      paragraphs: [
-        'Together Fund reached out after Faff to build internal tools and agents for venture capital work. Their information about potential founders, co-founders, and talent lived across Excel sheets, different sources, and mostly unorganized formats.',
-        'I built systems to ingest, clean, organize, enrich, and make that information useful to the rest of the team. Finding relationships between people turned out to be more of a data problem than an implementation problem. It was also a reality check about how much importance people still place on pedigree.'
-      ],
-      pullQuote: 'Problem statements of a startup. Freedom of an enterprise.'
-    }
-  ];
-
-  const interests = ['agents', 'backends', 'infrastructure', 'voice AI', 'evals', 'harnesses'];
-  const outside = ['reading', 'chess', 'running', 'pickleball', 'cooking', 'eating'];
-
   onMount(() => {
-    const sections = document.querySelectorAll('[data-reveal]');
+    const updateProgress = () => {
+      const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+      scrollProgress = scrollable > 0
+        ? Math.min(100, Math.max(0, (window.scrollY / scrollable) * 100))
+        : 0;
+    };
+
     const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry) => {
+        for (const entry of entries) {
           if (entry.isIntersecting) {
             entry.target.classList.add('is-visible');
             observer.unobserve(entry.target);
           }
-        });
+        }
       },
-      { threshold: 0.08 }
+      { threshold: 0.1 }
     );
-    sections.forEach((section) => observer.observe(section));
-    return () => observer.disconnect();
+
+    document.querySelectorAll('[data-reveal]').forEach((element) => observer.observe(element));
+    window.addEventListener('scroll', updateProgress, { passive: true });
+    updateProgress();
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('scroll', updateProgress);
+    };
   });
 </script>
 
 <svelte:head>
-  <title>Prateek Deshmukh</title>
-  <meta name="description" content="Prateek Deshmukh is a backend and AI engineer writing and thinking about technology, startups, politics, India, and other things." />
+  <title>Prateek Deshmukh — Founding engineer at Corpus</title>
+  <meta
+    name="description"
+    content="Prateek Deshmukh is a founding engineer at Corpus. He works on backends, AI systems, and the less glamorous parts that make products work."
+  />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://prateekdeshmukh.com/" />
   <meta property="og:title" content="Prateek Deshmukh" />
-  <meta property="og:description" content="Backend and AI engineer. Writing, opinions, engineering, and other things." />
+  <meta
+    property="og:description"
+    content="Founding engineer at Corpus. Backends, AI systems, writing, and side projects."
+  />
 </svelte:head>
 
-<div class="editorial-page">
-  <nav class="topbar" aria-label="Main navigation">
-    <a href="#top" class="wordmark">prateek deshmukh</a>
-    <div class="nav-links">
-      <a href="#about">about</a>
-      <a href="#work">work</a>
-      <a href="https://blog.prateekdeshmukh.com/" target="_blank" rel="noreferrer">writing</a>
-      <a href="#contact">contact</a>
-    </div>
-  </nav>
+<div class="progress" aria-hidden="true"><span style={`width: ${scrollProgress}%`}></span></div>
 
-  <header id="top" class="hero page-width">
-    <div class="hero-copy">
-      <p class="eyebrow">backend &amp; AI engineer / Bengaluru</p>
-      <h1>I'm Prateek.<br />I build all sorts<br />of systems.</h1>
-      <p class="hero-lede">I’m a backend &amp; AI engineer, but this is mostly a place for the things I’m interested in.</p>
-    </div>
-    <aside class="hero-aside">
-      <p><strong>Here you’ll find</strong><br />some opinions, some engineering, some writing, and an unreasonable number of interests.</p>
-      <a class="text-link" href="https://blog.prateekdeshmukh.com/" target="_blank" rel="noreferrer">read the writing <span aria-hidden="true">↗</span></a>
-    </aside>
+<div class="site" id="top">
+  <header class="topbar shell">
+    <a class="wordmark" href="#top" aria-label="Prateek Deshmukh, back to top">
+      <span>PD</span>
+      <span>Prateek Deshmukh</span>
+    </a>
+    <nav aria-label="Main navigation">
+      <a href="#work">Work</a>
+      <a href="#writing">Writing</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </nav>
   </header>
 
-  <main class="page-width content">
-    <section id="about" class="section section-intro" data-reveal>
-      <div class="section-label">01 / about</div>
-      <div class="section-body">
-        <h2>I’m rarely bored by stories, technology, or difficult problems.</h2>
-        <p class="large-copy">I’m opinionated, I stand my ground, and I can argue endlessly and somehow feel more energized by the end of it.</p>
+  <main class="shell">
+    <section class="hero" aria-labelledby="intro-title">
+      <div class="hero-status load load-1">
+        <span class="signal-dot" aria-hidden="true"></span>
+        <span>Backend + AI engineer</span>
+        <span>Bengaluru, India</span>
       </div>
-    </section>
 
-    <section class="section" data-reveal>
-      <div class="section-label">02 / interests</div>
-      <div class="section-body interests-body">
-        <h2>The things I keep coming back to.</h2>
-        <div class="interest-list">
-          {#each interests as interest, i}
-            <span class="interest-item" style="--i: {i}">{interest}</span>
-          {/each}
+      <div class="hero-copy load load-2">
+        <h1 id="intro-title">Prateek Deshmukh</h1>
+        <p>
+            I build the machinery behind the magic.
+        </p>
+      </div>
+
+      <aside class="current-role load load-3">
+        <div class="current-role-meta">
+          <span>Currently</span>
+          <span>2026—</span>
         </div>
-        <p class="aside-copy">Outside the computer: reading <em>The Difficulty of Being Good</em>, being a huge Greek mythology nerd, and trying to finish a half marathon before the year ends.</p>
+        <p class="current-role-title">
+          Founding engineer at
+          <a
+            href="https://inc42.com/buzz/peak-xv-alum-saksham-mittals-corpus-labs-in-talks-to-raise-funding-from-stellaris/"
+            target="_blank"
+            rel="noreferrer"
+          >Corpus <span aria-hidden="true">↗</span></a>
+        </p>
+        <p class="current-role-description">AI-native personal finance and wealth management.</p>
+      </aside>
+
+      <div class="hero-links load load-4">
+        <a href="mailto:prateek.deshmukh19@gmail.com">Email <span>↗</span></a>
+        <a href="https://github.com/prateekdesh" target="_blank" rel="noreferrer">GitHub <span>↗</span></a>
+        <a href="https://blog.prateekdeshmukh.com/" target="_blank" rel="noreferrer">Writing <span>↗</span></a>
+        <a href="/resume.pdf" target="_blank" rel="noreferrer">Résumé <span>↗</span></a>
       </div>
     </section>
 
-    <section id="writing" class="section" data-reveal>
-      <div class="section-label">03 / writing</div>
-      <div class="section-body writing-body">
-        <h2>I write and opine.</h2>
-        <article class="latest-post">
-          <div class="post-meta">04 jul 2026 / latest</div>
-          <div>
-            <h3>Distill to your fill!</h3>
-            <p>An accidental encounter with a shadow data-labelling operation, and the strange business of distilling frontier models.</p>
-            <a class="text-link" href="https://blog.prateekdeshmukh.com/writing/distill-to-your-fill" target="_blank" rel="noreferrer">read the post <span aria-hidden="true">↗</span></a>
-          </div>
-        </article>
-        <p class="small-copy writing-note">I write about startups, technology, politics, and India on <a class="text-link" href="https://blog.prateekdeshmukh.com/" target="_blank" rel="noreferrer">my blog</a>.</p>
-      </div>
-    </section>
+    <section class="section work-section" id="work">
+      <header class="section-header" data-reveal>
+        <p class="section-label">01 / Selected work</p>
+        <div>
+          <h2>A few things I’ve worked on.</h2>
+          <p>Click a row if you want the longer version.</p>
+        </div>
+      </header>
 
-    <section id="work" class="section work-section" data-reveal>
-      <div class="section-label">04 / work</div>
-      <div class="section-body">
-        <h2>The work, briefly.</h2>
-        <p class="section-lede">A few places I’ve spent time building things. The résumé has the detailed, properly formatted version.</p>
-
-        <div class="work-list">
-          {#each work as job, i}
-            <article class="work-entry" style="--i: {i}">
-              <div class="work-meta">{job.period}</div>
-              <div class="work-copy">
-                <p class="small-label">{job.company}</p>
-                <h3>{job.title}</h3>
-                {#each job.paragraphs as paragraph}
-                  <p>{paragraph}</p>
+      <div class="work-list">
+        {#each work as item, i}
+          <details class="work-record" data-reveal>
+            <summary>
+              <span class="record-index">{String(i + 1).padStart(2, '0')}</span>
+              <span class="record-company">
+                <strong>{item.company}</strong>
+                <span>{item.context} · {item.period}</span>
+              </span>
+              <span class="record-question">{item.question}</span>
+              <span class="record-result">
+                <strong>{item.result}</strong>
+                <span>{item.resultNote}</span>
+              </span>
+              <span class="record-toggle" aria-hidden="true"></span>
+            </summary>
+            <div class="work-detail">
+              <p>{item.summary}</p>
+              <ul>
+                {#each item.details as detail}
+                  <li>{detail}</li>
                 {/each}
-                {#if job.pullQuote}
-                  <p class="pull-quote">{job.pullQuote}</p>
-                {/if}
-              </div>
-            </article>
-          {/each}
-        </div>
-
-        <p class="resume-note">For dates, technologies, and the full employment record, <a class="text-link" href="/resume.pdf" target="_blank" rel="noreferrer">see my résumé <span aria-hidden="true">↗</span></a>.</p>
+              </ul>
+            </div>
+          </details>
+        {/each}
       </div>
+
+      <a class="section-link" href="/resume.pdf" target="_blank" rel="noreferrer" data-reveal>
+        Full résumé <span>↗</span>
+      </a>
     </section>
 
-    <section class="section" data-reveal>
-      <div class="section-label">05 / outside work</div>
-      <div class="section-body outside-body">
-        <h2>Things that make the week better.</h2>
-        <div class="outside-list">
-          {#each outside as item}
-            <span>{item}</span>
-          {/each}
+    <section class="section writing-section" id="writing">
+      <header class="section-header" data-reveal>
+        <p class="section-label">02 / Writing</p>
+        <div>
+          <h2>I write sometimes.</h2>
+          <p>Usually about technology, startups, politics and India.</p>
         </div>
-        <p class="small-copy">I also spend a suspicious amount of time trying to finish a half marathon before the year ends.</p>
-      </div>
+      </header>
+
+      <a
+        class="featured-writing"
+        href="https://blog.prateekdeshmukh.com/writing/distill-to-your-fill"
+        target="_blank"
+        rel="noreferrer"
+        data-reveal
+      >
+        <div class="writing-meta">
+          <span>Latest</span>
+          <time datetime="2026-07-04">04 Jul 2026</time>
+        </div>
+        <div class="writing-copy">
+          <h3>Distill to your fill!</h3>
+          <p>
+            I accidentally ended up inside a shadow data-labelling operation. This is what I found.
+          </p>
+        </div>
+        <span class="row-arrow" aria-hidden="true">↗</span>
+      </a>
+
+      <a
+        class="section-link"
+        href="https://blog.prateekdeshmukh.com/"
+        target="_blank"
+        rel="noreferrer"
+        data-reveal
+      >
+        All writing <span>↗</span>
+      </a>
     </section>
 
-    <section id="contact" class="section contact-section" data-reveal>
-      <div class="section-label">06 / hello</div>
-      <div class="section-body">
-        <h2>Send me something interesting.</h2>
-        <p class="large-copy">A difficult problem, a good book, a bad startup idea, or a strong disagreement all work.</p>
-        <div class="contact-links">
-          <a class="contact-email" href="mailto:prateek.deshmukh19@gmail.com">prateek.deshmukh19@gmail.com</a>
-          <button type="button" on:click={copyEmail}>{copied ? 'copied' : 'copy email'}</button>
+    <section class="section projects-section" id="projects">
+      <header class="section-header" data-reveal>
+        <p class="section-label">03 / Side projects</p>
+        <div>
+          <h2>Things I built for myself.</h2>
+          <p>Some were useful. Some just seemed fun to make.</p>
         </div>
+      </header>
+
+      <div class="project-list">
+        {#each projects as project, i}
+          <a
+            class="project-row"
+            href={project.href}
+            target="_blank"
+            rel="noreferrer"
+            data-reveal
+          >
+            <span class="record-index">{String(i + 1).padStart(2, '0')}</span>
+            <span class="project-name">
+              <strong>{project.name}</strong>
+              <span>{project.type}</span>
+            </span>
+            <span class="project-description">{project.description}</span>
+            <span class="row-arrow" aria-hidden="true">↗</span>
+          </a>
+        {/each}
+      </div>
+
+      <a
+        class="section-link"
+        href="https://github.com/prateekdesh"
+        target="_blank"
+        rel="noreferrer"
+        data-reveal
+      >
+        Browse GitHub <span>↗</span>
+      </a>
+    </section>
+
+    <section class="section elsewhere-section">
+      <header class="section-header" data-reveal>
+        <p class="section-label">04 / Elsewhere</p>
+        <div>
+          <h2>Away from the computer.</h2>
+        </div>
+      </header>
+
+      <dl class="elsewhere-list" data-reveal>
+        {#each elsewhere as item}
+          <div>
+            <dt>{item[0]}</dt>
+            <dd>{item[1]}</dd>
+          </div>
+        {/each}
+      </dl>
+    </section>
+
+    <section class="contact-section" id="contact" data-reveal>
+      <p class="section-label">05 / Contact</p>
+      <div class="contact-copy">
+        <h2>Say hello.</h2>
+        <p>A difficult problem, a good book, a bad startup idea, or a strong disagreement.</p>
+      </div>
+      <div class="contact-actions">
+        <a href="mailto:prateek.deshmukh19@gmail.com">prateek.deshmukh19@gmail.com</a>
+        <button type="button" on:click={copyEmail}>{copied ? 'Copied' : 'Copy'}</button>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer page-width">
-    <span>© 2026 Prateek Deshmukh</span>
-    <div>
-      <a href="https://github.com/prateekdesh" target="_blank" rel="noreferrer">github</a>
-      <a href="https://linkedin.com/in/prateekdeshmukh-/" target="_blank" rel="noreferrer">linkedin</a>
-      <a href="https://x.com/prateekdesh19" target="_blank" rel="noreferrer">x</a>
-      <a href="mailto:prateek.deshmukh19@gmail.com">email</a>
-    </div>
+  <footer class="footer shell">
+    <p>© 2026 Prateek Deshmukh</p>
+    <p>Still non-deterministic.</p>
+    <nav aria-label="Social links">
+      <a href="https://github.com/prateekdesh" target="_blank" rel="noreferrer">GitHub</a>
+      <a href="https://linkedin.com/in/prateekdeshmukh-/" target="_blank" rel="noreferrer">LinkedIn</a>
+      <a href="https://x.com/prateekdesh19" target="_blank" rel="noreferrer">X</a>
+    </nav>
   </footer>
 </div>
